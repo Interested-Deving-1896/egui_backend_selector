@@ -1,8 +1,7 @@
 use egui::Context;
+use egui_backend_selector::{BackendConfiguration, BackendInterop};
 use egui_demo_lib::{ColorTest, DemoWindows};
 use log::LevelFilter;
-use egui_backend_selector::{BackendConfiguration, BackendInterop};
-
 
 struct EguiApp {
     demo: DemoWindows,
@@ -27,10 +26,10 @@ fn main() {
     egui_backend_selector::run_app(
         "egui-backend-selector-test",
         BackendConfiguration::default(),
-        |e, s| EguiApp {
+        |_e, _s| EguiApp {
             demo: Default::default(),
             color_test: Default::default(),
         },
     )
-        .expect("failed to run app");
+    .expect("failed to run app");
 }
