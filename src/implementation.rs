@@ -244,7 +244,7 @@ impl<T: App> egui_software_backend::App for AppWrapper<T> {
     }
 }
 
-#[derive(Default, Clone)]
+#[derive(Clone)]
 pub struct BackendConfiguration {
     /// Egui `ViewportBuilder`. This struct is shared by both backends and contains
     /// 90% of the settings one wishes to set.
@@ -256,6 +256,20 @@ pub struct BackendConfiguration {
 
     /// The software backend specific options if any.
     software_backend_options: Option<SoftwareBackendAppConfiguration>,
+}
+
+impl Default for BackendConfiguration {
+    fn default() -> Self {
+        Self {
+            viewport: ViewportBuilder::default(),
+            eframe_options: None,
+            //https://github.com/DGriffin91/egui_software_backend/issues/11
+            software_backend_options: Some(SoftwareBackendAppConfiguration {
+                caching: false,
+                ..Default::default()
+            }),
+        }
+    }
 }
 
 impl BackendConfiguration {
@@ -275,8 +289,8 @@ impl BackendConfiguration {
     }
 }
 
-impl From<egui::ViewportBuilder> for BackendConfiguration {
-    fn from(value: egui::ViewportBuilder) -> Self {
+impl From<ViewportBuilder> for BackendConfiguration {
+    fn from(value: ViewportBuilder) -> Self {
         Self {
             viewport: value,
             eframe_options: None,

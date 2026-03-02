@@ -2,7 +2,7 @@
 name = "egui_backend_selector"
 version = "0.0.1"
 edition = "2024"
-rust-version = "1.86.0"
+rust-version = "1.88.0"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/AlexanderSchuetz97/egui_backend_selector"
 authors = ["Alexander Schütz <aschuetz@protonmail.com>"]
@@ -20,12 +20,14 @@ wgpu = ["eframe/wgpu"]
 [dependencies]
 eframe = { version = "^0.33.0", default-features = false }
 egui = { version = "^0.33.0", default-features = false }
-egui_software_backend = {version = "0.0.1", features = ["winit"]}
+egui_software_backend = {version = "0.0.2", features = ["winit"]}
 main_thread = "^0.1.1"
 log = "^0.4.0"
 ron = { version = "^0.12.0", optional = true }
 
 [target.'cfg(windows)'.dependencies]
 windows-sys = { version = "0.61.2", features = ["Win32_UI_WindowsAndMessaging"] }
-raw-cpuid = "^11.6.0"
 glfw = "=0.51.0" # Newer versions don't compile their C-Bindings successfully on all systems.
+
+[target.'cfg(all(any(target_arch = "x86_64", target_arch = "x86"), windows))'.dependencies]
+raw-cpuid = "^11.6.0" # CPUID is only available on x86 and we only use it on windows.

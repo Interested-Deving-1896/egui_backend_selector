@@ -743,9 +743,9 @@ dependencies = [
 
 [[package]]
 name = "egui_software_backend"
-version = "0.0.1"
+version = "0.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "18febd6d6d8c7b5672956503fe110907beefed94d49b046d9645fa8c39a94b4a"
+checksum = "b6ef5462191b3a8fa6b5dced74ae449223325350746bf2d56c79483d431200c5"
 dependencies = [
  "bytemuck",
  "constify",
