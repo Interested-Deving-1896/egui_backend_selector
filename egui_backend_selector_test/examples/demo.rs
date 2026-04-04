@@ -1,4 +1,4 @@
-use egui::Context;
+use egui::Ui;
 use egui_backend_selector::{BackendConfiguration, BackendInterop};
 use egui_demo_lib::{ColorTest, DemoWindows};
 use log::LevelFilter;
@@ -9,10 +9,10 @@ struct EguiApp {
 }
 
 impl egui_backend_selector::App for EguiApp {
-    fn update(&mut self, context: &Context, _backend: BackendInterop<'_>) {
-        egui::CentralPanel::default().show(context, |ui| {
-            self.demo.ui(context);
-            egui::Window::new("Color Test").show(context, |ui| {
+    fn ui(&mut self, ui: &mut Ui, _backend: BackendInterop<'_>) {
+        egui::CentralPanel::default().show_inside(ui, |ui| {
+            self.demo.ui(ui);
+            egui::Window::new("Color Test").show(ui, |ui| {
                 egui::ScrollArea::both().auto_shrink(false).show(ui, |ui| {
                     self.color_test.ui(ui);
                 });
@@ -26,9 +26,12 @@ fn main() {
     egui_backend_selector::run_app(
         "egui-backend-selector-test",
         BackendConfiguration::default(),
-        |_e, _s| EguiApp {
-            demo: Default::default(),
-            color_test: Default::default(),
+        |ctx, _s| {
+            egui_extras::install_image_loaders(&ctx);
+            EguiApp {
+                demo: Default::default(),
+                color_test: Default::default(),
+            }
         },
     )
     .expect("failed to run app");

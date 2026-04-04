@@ -16,8 +16,8 @@
 //! }
 //!
 //! impl egui_backend_selector::App for EguiApp {
-//!     fn update(&mut self, ctx: &egui::Context, backend: BackendInterop<'_>) {
-//!         egui::CentralPanel::default().show(ctx, |ui| {
+//!     fn ui(&mut self, ui: &mut egui::Ui, backend: BackendInterop<'_>) {
+//!         egui::CentralPanel::default().show_inside(ui, |ui| {
 //!             ui.label(format!("Hello World! Running on {}", backend.backend_name()));
 //!         });
 //!     }

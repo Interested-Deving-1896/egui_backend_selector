@@ -1,4 +1,5 @@
 use eframe::Storage;
+use egui::Ui;
 use egui_backend_selector::BackendInterop;
 use log::info;
 
@@ -22,10 +23,10 @@ impl EguiApp {
 }
 
 impl egui_backend_selector::App for EguiApp {
-    fn update(&mut self, ctx: &egui::Context, backend: BackendInterop<'_>) {
+    fn ui(&mut self, ui: &mut Ui, backend: BackendInterop<'_>) {
         self.frame_counter += 1;
 
-        egui::CentralPanel::default().show(ctx, |ui| {
+        egui::CentralPanel::default().show_inside(ui, |ui| {
             ui.label(format!(
                 "Hello World! Running on {}",
                 backend.backend_name()

@@ -5,7 +5,7 @@ Backend selector for egui that will select a backend at runtime that works on th
 ## Motivation
 The 'default' backend for rich client egui applications is eframe,
 eframe has some pretty steep system requirements (OpenGL) that not all runtimes meet.
-Notably, eframe is known to NOT work on windows in:
+Notably, eframe is known to NOT work on Windows in:
 * RDP (Remote Desktop Protocol) session
 * VMWare virtual machines
 * VirtualBox virtual machines
@@ -36,14 +36,14 @@ struct EguiApp {}
 
 impl EguiApp {
     fn new(context: egui::Context, storage: Option<&dyn Storage>) -> Self {
-        //egui_extras::install_image_loaders(&context); if you want to do this here.
+        //egui_extras::install_image_loaders(&context); Do this here, if you need it.
         EguiApp {}
     }
 }
 
 impl egui_backend_selector::App for EguiApp {
-    fn update(&mut self, ctx: &egui::Context, backend: BackendInterop<'_>) {
-        egui::CentralPanel::default().show(ctx, |ui| {
+    fn ui(&mut self, ui: &mut egui::Ui, backend: BackendInterop<'_>) {
+        egui::CentralPanel::default().show_inside(ui, |ui| {
             ui.label(format!("Hello World! Running on {}", backend.backend_name()));
         });
     }
@@ -85,3 +85,9 @@ fn your_main_function() {
 
 ## Non goals
 * wasm (Web Browser)
+
+## egui version mapping
+| egui_backend_selector | egui_software_backend | egui     |
+|-----------------------|-----------------------|----------|
+| 0.0.2                 |  0.0.3                | 0.34.X   |
+| 0.0.1                 |  0.0.2                | 0.33.X   |

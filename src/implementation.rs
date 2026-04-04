@@ -3,7 +3,7 @@ compile_error!("Either glow or wgpu feature must be enabled for eframe to be use
 
 use eframe::egui::Context;
 use eframe::{Frame, IntegrationInfo, NativeOptions, Storage};
-use egui::ViewportBuilder;
+use egui::{Ui, ViewportBuilder};
 use egui_software_backend::{SoftwareBackend, SoftwareBackendAppConfiguration};
 use main_thread::IsMainThread;
 use std::error::Error;
@@ -185,7 +185,7 @@ impl BackendInterop<'_> {
 /// App traits
 pub trait App {
     /// The update loop
-    fn update(&mut self, context: &Context, backend: BackendInterop<'_>);
+    fn ui(&mut self, context: &mut Ui, backend: BackendInterop<'_>);
 
     /// This function is called once when the application exists.
     /// It is NOT called when using eframe with the wgpu backend.
@@ -202,8 +202,8 @@ pub trait App {
 struct AppWrapper<T: App>(T, Option<Box<dyn Storage>>, IntegrationInfo);
 
 impl<T: App> eframe::App for AppWrapper<T> {
-    fn update(&mut self, ctx: &Context, frame: &mut Frame) {
-        self.0.update(ctx, BackendInterop::Eframe(frame));
+    fn ui(&mut self, ui: &mut Ui, frame: &mut Frame) {
+        self.0.ui(ui, BackendInterop::Eframe(frame));
     }
 
     fn save(&mut self, storage: &mut dyn Storage) {
@@ -221,11 +221,11 @@ impl<T: App> eframe::App for AppWrapper<T> {
     }
 }
 impl<T: App> egui_software_backend::App for AppWrapper<T> {
-    fn update(&mut self, ctx: &Context, software_backend: &mut SoftwareBackend) {
+    fn ui(&mut self, ui: &mut Ui, software_backend: &mut SoftwareBackend) {
         self.2.cpu_usage = software_backend.last_frame_time().map(|a| a.as_secs_f32());
 
-        self.0.update(
-            ctx,
+        self.0.ui(
+            ui,
             BackendInterop::SoftwareBackend(SoftwareBackendInterop {
                 swb: software_backend,
                 integration_info: &mut self.2,
@@ -443,8 +443,8 @@ impl Storage for KVStorage {
 /// }
 ///
 /// impl egui_backend_selector::App for EguiApp {
-///     fn update(&mut self, ctx: &egui::Context, backend: BackendInterop<'_>) {
-///         egui::CentralPanel::default().show(ctx, |ui| {
+///     fn ui(&mut self, ctx: &mut egui::Ui, backend: BackendInterop<'_>) {
+///         egui::CentralPanel::default().show_inside(ctx, |ui| {
 ///             ui.label(format!("Hello World! Running on {}", backend.backend_name()));
 ///         });
 ///     }

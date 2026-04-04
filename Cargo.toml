@@ -1,6 +1,6 @@
 [package]
 name = "egui_backend_selector"
-version = "0.0.1"
+version = "0.0.2"
 edition = "2024"
 rust-version = "1.88.0"
 license = "MIT OR Apache-2.0"
@@ -18,9 +18,9 @@ glow = ["eframe/glow"]
 wgpu = ["eframe/wgpu"]
 
 [dependencies]
-eframe = { version = "^0.33.0", default-features = false }
-egui = { version = "^0.33.0", default-features = false }
-egui_software_backend = {version = "0.0.2", features = ["winit"]}
+eframe = { version = "^0.34.0", default-features = false }
+egui = { version = "^0.34.0", default-features = false }
+egui_software_backend = {version = "0.0.3", features = ["winit"]}
 main_thread = "^0.1.1"
 log = "^0.4.0"
 ron = { version = "^0.12.0", optional = true }
