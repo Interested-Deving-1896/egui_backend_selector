@@ -1,93 +1,75 @@
-# Egui Backend Selector
+[update-readmes]   Mode: rewrite — migrating to template structure...
+# egui_backend_selector
 
-Backend selector for egui that will select a backend at runtime that works on the system your application is running on.
+[![Built with Ona](https://ona.com/build-with-ona.svg)](https://app.ona.com/#https://github.com/Interested-Deving-1896/egui_backend_selector)
 
-## Motivation
-The 'default' backend for rich client egui applications is eframe,
-eframe has some pretty steep system requirements (OpenGL) that not all runtimes meet.
-Notably, eframe is known to NOT work on Windows in:
-* RDP (Remote Desktop Protocol) session
-* VMWare virtual machines
-* VirtualBox virtual machines
-* Installations with only VGA graphics (no drivers installed yet.)
+<!-- AI:start:what-it-does -->
+_Description pending._
+<!-- AI:end:what-it-does -->
 
-This is not ideal for developing portable applications, especially if those applications 
-target Windows servers or applications that are supposed to work on virgin windows installs
-without gpu drivers installed.
+## Architecture
 
-Thankfully, DGriffin91 implemented a software renderer (https://github.com/DGriffin91/egui_software_backend) 
-for egui which works on nearly all platforms;
-however, since it is not hardware accelerated, 
-it is going to be slower for systems that have a gpu and proper drivers installed.
+<!-- AI:start:architecture -->
+_Architecture documentation pending._
+<!-- AI:end:architecture -->
 
-This crate contains all the platform-specific logic necessary to determine which backend
-will work at runtime and will then delegate the execution of your app to the fastest backend.
-To achieve this, the crate provides a thin "drop-in" wrapper for eframe::App as well
-as the equivalent of it in DGriffin91's software backend.
+## Install
 
-## Example
+<!-- Add installation instructions here. This section is yours — the AI will not modify it. -->
 
-```rust
-use log::LevelFilter;
-use egui_backend_selector::{BackendConfiguration, BackendInterop};
-use eframe::Storage;
-
-struct EguiApp {}
-
-impl EguiApp {
-    fn new(context: egui::Context, storage: Option<&dyn Storage>) -> Self {
-        //egui_extras::install_image_loaders(&context); Do this here, if you need it.
-        EguiApp {}
-    }
-}
-
-impl egui_backend_selector::App for EguiApp {
-    fn ui(&mut self, ui: &mut egui::Ui, backend: BackendInterop<'_>) {
-        egui::CentralPanel::default().show_inside(ui, |ui| {
-            ui.label(format!("Hello World! Running on {}", backend.backend_name()));
-        });
-    }
-}
-
-fn your_main_function() {
-    //init your logger here.
-  
-    egui_backend_selector::run_app("app-name", BackendConfiguration::default(), |ctx, storage| EguiApp::new(ctx, storage))
-        .expect("failed to run app");
-}
+```bash
+git clone https://github.com/Interested-Deving-1896/egui_backend_selector.git
+cd egui_backend_selector
 ```
-## Which backend is selected on which platform?
-### macOS or BSD like FreeBSD
-* Always eframe
 
-### Linux
-* On wayland eframe is always chosen.
-* On X11 eframe is chosen unless the current display is a remote display (like with X11 over SSH), then the software backend is chosen.
+## Usage
 
-### Windows
-* In the case of an RDP Session, the software backend is always chosen.
-  The registry keys that determine if the dedicated graphics device "should" be used to accelerate the RDP session
-  and provide an opengl version newer than opengl 1.3 are not evaluated. 
-  Even if those keys are set, there is no way to know if the system even has a gpu capable of doing it.
+<!-- Add usage examples here. This section is yours — the AI will not modify it. -->
 
-* On X86_64 or X86 targets if the system runs in a virtual machine, then
-  if the system has drivers installed that indicate VirtualBox or VMWare, the software backend is chosen.
-  When attempting to launch your eframe application with any of those drivers installed, 
-  your application is likely to run into an ACCESS_VIOLATION due to buggy drivers.
-  * Note: These checks are *NOT* foolproof as they hard-code the name of the mentioned drivers which can change at any time,
-    and also do not check if those drivers are actually loaded, as that would require system debugging privileges.
-  * KVM: The KVM drivers appear to work with eframe, so the presence of KVM is not checked.
-  * Microsoft HyperV: Completely untested.
+## Configuration
 
-* If the opengl version on the system is lower than 3.2 the software backend is chosen.
-  To check this, the crate creates a small offscreen opengl context which is then discarded again.
-* For all other windows installations eframe is chosen.
+<!-- Document configuration options here. This section is yours — the AI will not modify it. -->
 
-## Non goals
-* wasm (Web Browser)
+## CI
 
-## egui version mapping
-| egui_backend_selector | egui_software_backend | egui     |
-|-----------------------|-----------------------|----------|
-| 0.0.2                 |  0.0.3                | 0.34.X   |
-| 0.0.1                 |  0.0.2                | 0.33.X   |
+<!-- AI:start:ci -->
+_CI documentation pending._
+<!-- AI:end:ci -->
+
+## Mirror chain
+
+<!-- AI:start:mirror-chain -->
+This repo is maintained in [`Interested-Deving-1896/egui_backend_selector`](https://github.com/Interested-Deving-1896/egui_backend_selector) and mirrored through:
+
+```
+Interested-Deving-1896/egui_backend_selector  ──►  OpenOS-Project-OSP/egui_backend_selector  ──►  OpenOS-Project-Ecosystem-OOC/egui_backend_selector
+```
+
+Changes flow downstream automatically via the hourly mirror chain in
+[`fork-sync-all`](https://github.com/Interested-Deving-1896/fork-sync-all).
+Direct commits to OSP or OOC are detected and opened as PRs back to `Interested-Deving-1896`.
+<!-- AI:end:mirror-chain -->
+
+## Contributors
+
+<!-- AI:start:contributors -->
+_Contributors pending._
+<!-- AI:end:contributors -->
+
+## Origins
+
+<!-- AI:start:origins -->
+_Original project — no upstream fork._
+<!-- AI:end:origins -->
+
+## Resources
+
+<!-- AI:start:resources -->
+_No additional resource files found._
+<!-- AI:end:resources -->
+
+## License
+
+<!-- AI:start:license -->
+[MIT](https://github.com/Interested-Deving-1896/egui_backend_selector/blob/master/LICENSE) © 2026 [Interested-Deving-1896](https://github.com/Interested-Deving-1896)
+<!-- AI:end:license -->
